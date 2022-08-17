@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Viaje</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="card card-body bg-dark ">
+    <main class="container-fluid">
+      <div class="row ">
+        <h1 class="col text-center text-white">Viaje Bus</b></h1>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-6 row justify-content-center h-50 p-5">
+          {% if update %}
+          <form method="POST" action={% url "update" %} class="card card-body mb-2">
+            {% csrf_token %}
+            
+            <label for="numeroplaca">Numero de placa:</label>
+              <input type="text" value="{{ update.numeroplaca }}" class="form-control mb-2"  name="numeroplaca" id="numeroplaca" aria-describedby="emailHelp"/>
+            
+              <label for="horapartida">Hora de partida:</label>
+              <input type="text" value="{{ update.horapartida }}"class="form-control mb-2"  name="horapartida" id="horapartida" aria-describedby="emailHelp"/>
+              
+              <label for="llegadahora">Hora de llegada :</label>
+              <input type="text" value="{{ update.llegadahora }}" class="form-control mb-2" name="llegadahora" id="llegadahora" aria-describedby="emailHelp"/>
+             
+              <label for="horaviaje">Numero de hora viaje:</label>
+              <input type="text" value="{{ update.horaviaje }}" class="form-control mb-2"  name="horaviaje" id="horaviaje" aria-describedby="emailHelp"/>
+              
+              <label for="partida">Partida:</label>
+              <input type="text" value="{{ update.partida }}" class="form-control mb-2"  name="partida" id="partida" aria-describedby="emailHelp"/>
+              
+              <label for="destino">Destino:</label>
+              <input type="text" value="{{ update.destino }}" class="form-control mb-2"  name="destino" id="destino" aria-describedby="emailHelp"/>
+              
+              <label for="costo">Costo:</label>
+              <input type="text" value="{{ update.costo}}" class="form-control mb-2"  name="costo" id="costo" aria-describedby="emailHelp"/>
+            
+              <input type="hidden" name="id" value="{{ update.id }}" />
+            <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+          </form>          
+          {% else %}
+
+          {{error}}
+
+      <!-- Formulario -->
+      <form action="{% url 'create_task' %}" method="POST" class="card card-body mb-2">
+        {% csrf_token %}
+
+        <label for="numeroplaca">Numero de placa:</label>
+        <input type="text" name="numeroplaca" class="form-control mb-2" autofocus />
+
+        <label for="horapartida">Hora de partida:</label>
+        <input type="text" name="horapartida"  class="form-control mb-2" autofocus />
+
+        <label for="llegadahora">Hora de llegada:</label>
+        <input type="text" name="llegadahora" class="form-control mb-2" autofocus />
+        
+        <label for="horaviaje">Hora de viaje:</label>
+        <input type="text"a name="horaviaje"  class="form-control mb-2" autofocus />
+
+        <label for="partida">Partida:</label>
+        <input type="text" name="partida"  class="form-control mb-2" autofocus />
+        
+        <label for="destino">Destino:</label>
+        <input type="text" name="destino" class="form-control mb-2" autofocus />
+       
+        <label for="costo">Costo:</label>
+        <input type="text" name="costo"  class="form-control mb-2" autofocus />
+
+        <button class="btn btn-secondary">Guardar</button>
+      </form>
+
+          {% endif %}
+        </div>
+
+        <div class="col-5 container justify-content-center">
+          {% for task in task %}
+          <!-- Lista-->
+          <div class="list-group">
+            <div class="card card-body bg-secondary text-light d-flex flex-row justify-content-between mb-2">
+              <div>
+                <h3 class="h6 text-center">Numero de placa es <b>{{task.numeroplaca}}</b></h3>
+                <p>La hora de partida es <b>{{task.horapartida}}</b></br>
+                   La hora de llegada es <b>{{task.llegadahora}}</b></br>
+                   La hora de viaje es <b>{{task.horaviaje}}</b></br>
+                   Partida: <b>{{task.partida}}</b></br>
+                   El Destino es a <b>{{task.destino}}</b></br>
+                   El costo es de <b>{{task.costo}}$</b></p>
+              </div>
+    
+              <form action="{% url 'delete_task' task.id %}" method="POST">
+                {% csrf_token %}
+                <a href="{% url 'update_from' task.id %}" class="btn btn-primary">Editar</a>
+                <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">Eliminar</a>             
+               </form>
+            </div>
+          </div>
+          
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+      integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
